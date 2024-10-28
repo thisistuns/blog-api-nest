@@ -17,6 +17,16 @@ export class AuthService {
   ) {}
 
   async register(registerUserDto: RegisterUserDto): Promise<User> {
+    const checkUser = await this.userRepository.findOne({
+      where: {
+        email: registerUserDto.email,
+      },
+    });
+
+    if (checkUser) {
+      throw new HttpException('Email exist user!', HttpStatus.BAD_REQUEST);
+    }
+
     const hashPassword = await this.hashPassword(registerUserDto.password);
     return await this.userRepository.save({
       ...registerUserDto,
