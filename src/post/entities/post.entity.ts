@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { Category } from '../../category/entities/category.entity';
 
 @Entity()
 export class Post {
@@ -30,6 +31,11 @@ export class Post {
   @CreateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: 'CASCADE',
+  })
   user: User;
+
+  @ManyToOne(() => Category, (category) => category.posts)
+  category: Category;
 }
